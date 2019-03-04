@@ -1,8 +1,3 @@
-from sanitize_input import get_input
-
-# Θ(n) time for both adding n items to the list, and for querying the list.
-
-
 class Array():
 
     def __init__(self, *args, length):
@@ -20,6 +15,7 @@ class Array():
 
 
 if __name__ == '__main__':
+    from sanitize_input import get_input
     test_object = get_input()
     nlist = Array(*test_object.elements, length=len(test_object.elements))
     for lower, upper in test_object.ranges:
