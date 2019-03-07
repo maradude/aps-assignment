@@ -1,59 +1,82 @@
-"""
-Require: A tree T, an interval [x s , x f ]
-function FindSplitNode(T, x s , x f )
-    v ← root(T)
-    x v ← value stored in v
-    while v is not a leaf and ( x f ≤ x v or x s > x v ) do
-        if x f ≤ x v then
-            v ← left child of v
-        else
-            v ← right child of v
-        end if
-        x v ← value stored in v
-    end while
-    return v
-end function
-"""
+from dataclasses import dataclass  # requires Python 3.7
+import typing
+from math import ceil
+
+
+class RangeTree:
+
+    def __init__(self, values):
+        self.values = sorted(values)
+        self.root = _Node(self.values[ceil/len(values)/2])
+        self.root.left = _build(self.values[:ceil(/2)])
+
+
+    @dataclass
+    class _Node:
+        value: int
+        left: 'typing.Any' = None
+        right: 'typing.Any' = None
+
+    def _build(self, values):
+        n = len(values)
+        if n == 0:
+            return self([])
+        mid_point = ceil(n/2)
+        mid_value = values[mid_point]
+        left_tree = values[:mid_point]
+        right_tree = values[mid_point+1:]
+        new_node = RangeTree._Node(mid_value)
+        new_node.left = RangeTree._build(left_tree)
+        new_node.right = RangeTree._build(right_tree)
+
+
+def get_root(tree):
+    return tree.root
+
+
+def is_leaf(node):
+    return node.left is None or node.right is None
 
 
 def find_split_node(tree, lbound, ubound):
-    v = tree.root
-    xv = v
-    # while v.is_branch and
-    pass
-
-
-"""
-Require: A tree T, an interval [x s , x f ]
-function OneDRangeQuery(T, x s , x f )
-    v split ← FindSplitNode(T, x s , x f )
-    if v split is a leaf then
-        check if the point stored at v split must be reported (and if so, report it).
-        return
-    end if
-    v ← left child of v split . Follow the path to x s and report the points in subtrees right of the path
-    while v is not a leaf do
-        if x s ≤ value stored in node v then
-            add the right subtree of v to the report
-            v ← left subtree of v
-        else
-            v ← right subtree of v
-        end if
-    end while
-    check if v should be reported
-    Repeat lines 7-16 for the right subtree of v split , going to x f and reporting subtrees to the left of the path.
-    return reported nodes
-end function
-"""
+    node = get_root(tree)
+    splitting_value = node
+    while not is_leaf(node) and (ubound <= splitting_value or
+                                 lbound > splitting_value):
+        if ubound <= splitting_value:
+            node = node.left
+        else:
+            node = node.right
+        splitting_value = node
+    return node
 
 
 def one_d_range_query(tree, lbound, ubound):
-    pass
+    reported_nodes = []
+    split_node = find_split_node(tree, lbound, ubound)
+    if split_node.leaf:
+        # check if point stored a node_split needs to be reported
+        # report it
+        return
+    node = split_node.left  # repeat start
+    while not node.leaf:
+        if lbound <= node:
+            pass  # add right subtree of node to report
+            node = node.left
+        else:
+            node = node.right
+    # check if node should be reported
+    # goto node = split_node.left to do same for right
+    # subtree of split_node, going to ubound and reporting
+    # subtrees to the left of the path
+    return reported_nodes
 
 
 if __name__ == '__main__':
+    # should be O(log n)
     from sanitize_input import get_input
     test_object = get_input()
+
     # nlist = SortedArray(*test_object.elements)
     # for lower, upper in test_object.ranges:
-        # print(' '.join(map(str, nlist.get_range(lower, upper))))
+    # print(' '.join(map(str, nlist.get_range(lower, upper))))
