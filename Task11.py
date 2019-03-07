@@ -1,4 +1,4 @@
-class Array():
+class RangeList:
 
     def __init__(self, *args, length):
         # linear time construction
@@ -17,7 +17,6 @@ class Array():
 if __name__ == '__main__':
     from sanitize_input import get_input
     test_object = get_input()
-    nlist = Array(*test_object.elements, length=len(test_object.elements))
+    nlist = RangeList(*test_object.elements, length=len(test_object.elements))
     for lower, upper in test_object.ranges:
         print(' '.join(map(str, nlist.get_range(lower, upper))))
-

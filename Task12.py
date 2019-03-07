@@ -1,4 +1,4 @@
-class SortedArray:
+class SortedRangeList:
 
     def __init__(self, *args):
         self._values = list(sorted(args))
@@ -9,8 +9,8 @@ class SortedArray:
 
     def get_range(self, lbound, ubound):
         # do 2 log n searches, get elements from between
-        min_i = SortedArray._findStart(self._values, lbound, 0, len(self))
-        max_i = SortedArray._findEnd(self._values, ubound, 0, len(self))
+        min_i = SortedRangeList._findStart(self._values, lbound, 0, len(self))
+        max_i = SortedRangeList._findEnd(self._values, ubound, 0, len(self))
         return self._values[min_i:max_i]
 
     @staticmethod
@@ -20,9 +20,9 @@ class SortedArray:
             return lbound
         mid_point = (lbound+ubound) // 2
         if arr[mid_point] < target:
-            return SortedArray._findStart(arr, target, mid_point+1, ubound)
+            return SortedRangeList._findStart(arr, target, mid_point+1, ubound)
         else:
-            return SortedArray._findStart(arr, target, lbound, mid_point-1)
+            return SortedRangeList._findStart(arr, target, lbound, mid_point-1)
 
     @staticmethod
     def _findEnd(arr, target, lbound, ubound):
@@ -31,14 +31,14 @@ class SortedArray:
             return lbound
         mid_point = (lbound+ubound) // 2
         if arr[mid_point] > target:
-            return SortedArray._findEnd(arr, target, lbound, mid_point-1)
+            return SortedRangeList._findEnd(arr, target, lbound, mid_point-1)
         else:
-            return SortedArray._findEnd(arr, target, mid_point+1, ubound)
+            return SortedRangeList._findEnd(arr, target, mid_point+1, ubound)
 
 
 if __name__ == '__main__':
     from sanitize_input import get_input
     test_object = get_input()
-    nlist = SortedArray(*test_object.elements)
+    nlist = SortedRangeList(*test_object.elements)
     for lower, upper in test_object.ranges:
         print(' '.join(map(str, nlist.get_range(lower, upper))))
