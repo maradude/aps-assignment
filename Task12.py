@@ -26,7 +26,7 @@ class SortedRangeList:
 
     @staticmethod
     def _findEnd(arr, target, lbound, ubound):
-        # find the index of the last occurance of k in the array
+        # not necessary, can just iterate from findStart until arr[i] > target
         if lbound > ubound:
             return lbound
         mid_point = (lbound+ubound) // 2
