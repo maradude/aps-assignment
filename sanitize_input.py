@@ -9,10 +9,22 @@ def get_input(type="1d"):
     if type == "1d":
         return _get_1d_input()
     if type == "kd":
-        return _get_kd_input()
+        return _get_rectangle_kd_input()
+    if type == "ckd":
+        return _get_circular_kd_input()
+    if type == "pkd":
+        return _get_polygonal_kd_input()
 
 
-def _get_kd_input():
+def _get_polygonal_kd_input():
+    pass
+
+
+def _get_circular_kd_input():
+    pass
+
+
+def _get_rectangle_kd_input():
     """
     Read k numbers per line from stdin,
     first line needs to have amount of points, number of dimensions,
@@ -29,6 +41,7 @@ def _get_kd_input():
     except TypeError as e:
         print(e)
         sys.exit()
+
     len_points, k_dimensions, len_ranges = map(int, next(tests).split(' '))
     points = []
     for _ in range(len_points):
@@ -65,8 +78,8 @@ class Tests:
     """
     just a record to hold elements list and range tuples
     """
-    elements: List[int]
-    ranges: any
+    elements: List
+    ranges: List
     dimensions: int = 1
 
 
@@ -74,7 +87,3 @@ if __name__ == '__main__':
     a = get_input()
     print(a.elements)
     print(a.ranges)
-
-# 8 2 3 10 23 30 62 47 105 89 7 47 10 89
-# expect output 10 23 30 47
-# or 10 23 30 62 47 89
