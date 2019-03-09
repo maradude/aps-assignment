@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field  # requires Python 3.7
+from dataclasses import dataclass  # requires Python 3.7
 from math import ceil
 
 
@@ -7,11 +7,11 @@ class RangeTree:
     def __init__(self, *values):
         self.root = RangeTree.build(sorted(values))
 
-    @dataclass(order=True)
+    @dataclass()
     class _Node:
-        data: int = field(compare=True)
-        left: 'typing.Any' = field(default=None, compare=False)
-        right: 'typing.Any' = field(default=None, compare=False)
+        data: int
+        left: '_Node' = None
+        right: '_Node' = None
 
         def is_leaf(self):
             return self.left is None or self.right is None
@@ -36,7 +36,7 @@ class RangeTree:
                 root.left = RangeTree._Node(arr[0])
                 root.right = RangeTree._Node(arr[-1])
             return root
-        midp = ceil(length/2) - 1
+        midp = ceil(length / 2) - 1
         left = arr[:midp+1]
         right = arr[midp+1:]
         root = RangeTree._Node(left[-1])
