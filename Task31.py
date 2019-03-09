@@ -6,15 +6,12 @@ rectangle queries where each side goes along the x- or y-axis.
 
 def check_in_bound(point, lbound, ubound):
     for d, bound in enumerate(zip(lbound, ubound)):
-            if bound[0] <= point[d] <= bound[1]:
-                pass
-            else:
+            if not (bound[0] <= point[d] <= bound[1]):
                 return False
     return True
 
 
 def simple_range_query(points, lbound, ubound):
-    # in_range = []
     if len(lbound) != len(points[0]):
         print("points dimension and range erro don't match")
         raise ValueError
