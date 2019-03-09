@@ -1,22 +1,14 @@
-class RangeList:
+def get_range(arr, lbound, ubound):
+    return (element for element in arr if lbound <= element <= ubound)
 
-    def __init__(self, *args, length):
-        # linear time construction
-        self._values = [None]*length  # not really an optimisation in python
-        i = 0
-        for element in args:
-            self._values[i] = element
-            i += 1
 
-    def get_range(self, lbound, ubound):
-        # linear time range search
-        return (element for element in self._values
-                if lbound <= element <= ubound)
+def main():
+    from sanitize_input import get_input
+    test_object = get_input()
+    for lower, upper in test_object.ranges:
+        result = get_range(test_object.elements, lower, upper)
+        print(' '.join(map(str, result)))
 
 
 if __name__ == '__main__':
-    from sanitize_input import get_input
-    test_object = get_input()
-    nlist = RangeList(*test_object.elements, length=len(test_object.elements))
-    for lower, upper in test_object.ranges:
-        print(' '.join(map(str, nlist.get_range(lower, upper))))
+    main()
