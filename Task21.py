@@ -13,10 +13,22 @@ class RangeTree:
         left: 'typing.Any' = field(default=None, compare=False)
         right: 'typing.Any' = field(default=None, compare=False)
 
-    # def __eq__(self, order)
+        def is_leaf(self):
+            return self.left is None or self.right is None
 
     @staticmethod
     def build(arr):
+        """
+        This function based on the following paper
+        @inproceedings{lueker1978data,
+            title={A data structure for orthogonal range queries},
+            author={Lueker, George S},
+            booktitle={19th Annual Symposium on Foundations of Computer Science (sfcs 1978)},
+            pages={28--34},
+            year={1978},
+            organization={IEEE}
+        }
+        """
         length = len(arr)
         if length < 3:
             root = RangeTree._Node(arr[0])
@@ -32,6 +44,62 @@ class RangeTree:
         root.right = RangeTree.build(right)
         return root
 
+    def find_split_node(self, lbound, ubound):
+        node = self.root
+        splitting_value = int(node.data)
+        while not node.is_leaf() and (ubound <= splitting_value or
+                                      lbound > splitting_value):
+            if ubound <= splitting_value:
+                node = node.left
+            else:
+                node = node.right
+            splitting_value = node.data
+        return node
+
+    def one_d_range_query(self, lbound, ubound):
+        reported_nodes = []
+        split_node = self.find_split_node(lbound, ubound)
+        if split_node.is_leaf():
+            if lbound <= split_node.data <= ubound:
+                reported_nodes.append(split_node.data)
+                return reported_nodes
+        node = split_node.left
+        while not node.is_leaf():
+            if lbound <= node.data:
+                reported_nodes.extend(RangeTree.get_tree_values(node.right))
+                node = node.left
+            else:
+                node = node.right
+        if node.data >= lbound:
+            reported_nodes.append(node.data)
+        node = split_node.right
+        while not node.is_leaf():
+            if ubound >= node.data:
+                reported_nodes.extend(RangeTree.get_tree_values(node.left))
+                node = node.right
+            else:
+                node = node.left
+        if node.data <= ubound:
+            reported_nodes.append(node.data)
+        return reported_nodes
+
+    @staticmethod
+    def get_tree_values(root):
+        # modified version of https://code.activestate.com/recipes/579138-simple-breadth-first-depth-first-tree-traversal/
+        nodes = []
+        stack = [root]
+        while stack:
+            cur_node = stack[0]
+            stack = stack[1:]
+            if cur_node.is_leaf():
+                nodes.append(cur_node.data)
+            if cur_node.right is not None:
+                stack.append(cur_node.right)
+            if cur_node.left is not None:
+                stack.append(cur_node.left)
+        return nodes
+
+"""
     @staticmethod
     def print2DUtil(root, space):
         # debugging tree print stolen from
@@ -59,111 +127,16 @@ class RangeTree:
         # space=[0]
         # Pass initial space count as 0
         RangeTree.print2DUtil(root, 0)
-
-
 """
-        def breadth_first_traversal(self, root=None):
-            #In BFS the Node Values at each level of the Tree
-             #are traversed before going to next level
-            root = self.root if root is None else root
-            to_visit = [root]
-            while to_visit:
-                current = to_visit.pop(0)
-                print(current.value)
-                if current.left:
-                    to_visit.append(current.left)
-                if current.right:
-                    to_visit.append(current.right)
-
-"""
-# def print_tree(self):
-
-
-def get_root(tree):
-    return tree.root
-
-
-def is_leaf(node):
-    return node.left is None or node.right is None
-
-
-def find_split_node(tree, lbound, ubound):
-    node = get_root(tree)
-    splitting_value = int(node.data)
-    while not is_leaf(node) and (ubound <= splitting_value or
-                                 lbound > splitting_value):
-        if ubound <= splitting_value:
-            node = node.left
-        else:
-            node = node.right
-        splitting_value = node.data
-    return node
-
-
-def get_tree_values(root):
-    # modified version of https://code.activestate.com/recipes/579138-simple-breadth-first-depth-first-tree-traversal/
-    nodes = []
-    stack = [root]
-    while stack:
-        cur_node = stack[0]
-        stack = stack[1:]
-        if is_leaf(cur_node):
-            nodes.append(cur_node.data)
-        if cur_node.right is not None:
-            stack.append(cur_node.right)
-        if cur_node.left is not None:
-            stack.append(cur_node.left)
-    return nodes
-
-
-def one_d_range_query(tree, lbound, ubound):
-    reported_nodes = []
-    split_node = find_split_node(tree, lbound, ubound)
-    if is_leaf(split_node):
-        if lbound <= split_node.data <= ubound:
-            reported_nodes.append(split_node.data)
-            return reported_nodes
-    node = split_node.left  # repeat start
-    while not is_leaf(node):
-        if lbound <= node.data:
-            # reported_nodes.append(node.data)
-            reported_nodes.extend(get_tree_values(node.right))
-            node = node.left
-        else:
-            node = node.right
-    if node.data >= lbound:
-        reported_nodes.append(node.data)
-    node = split_node.right
-    while not is_leaf(node):
-        if ubound >= node.data:
-            reported_nodes.extend(get_tree_values(node.left))
-            node = node.right
-        else:
-            node = node.left
-    if node.data <= ubound:
-        reported_nodes.append(node.data)
-    # check if node should be reported
-    # goto node = split_node.left to do same for right
-    # subtree of split_node, going to ubound and reporting
-    # subtrees to the left of the path
-    return reported_nodes
 
 
 if __name__ == '__main__':
-    # should be O(log n)
     from sanitize_input import get_input
     test_object = get_input()
     # test = [3, 10, 19, 23, 30, 49, 57, 59, 62, 70, 80, 89, 100, 105]
     # test = [3, 19, 30, 49, 59, 70, 89, 100]
     a = RangeTree(test_object.elements)
     # RangeTree.print2D(find_split_node(a, 3, 19))
-    # print(one_d_range_query(a, 0, 109))
-    # print(test[4:-3])
     rangeTree = RangeTree(*test_object.elements)
     for lower, upper in test_object.ranges:
-        print(' '.join(map(str, one_d_range_query(rangeTree, lower, upper))))
-
-    # print(sorted(one_d_range_query(a, *test_object.ranges)))
-    # nlist = SortedArray(*test_object.elements)
-    # for lower, upper in test_object.ranges:
-    # print(' '.join(map(str, nlist.get_range(lower, upper))))
+        print(' '.join(map(str, rangeTree.one_d_range_query(lower, upper))))
