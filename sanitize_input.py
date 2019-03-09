@@ -24,24 +24,14 @@ def _get_kd_input():
 
     return object with points and ranges
     """
-    file = """8 2 1
-3 2
-10 4
-23 6
-30 10
-62 8
-47 14
-105 9
-89 7
-[7 2] [47 12]"""
     try:
-            tests = (line for line in file.split('\n'))
+        tests = (line for line in sys.stdin)
     except TypeError as e:
         print(e)
         sys.exit()
-    len_points, k_dimensions, len_ranges = next(tests).split(' ')
+    len_points, k_dimensions, len_ranges = map(int, next(tests).split(' '))
     points = []
-    for _ in range(int(len_points)):
+    for _ in range(len_points):
         points.append(tuple(int(n) for n in next(tests).split(' ')))
     array = sub(' ', ',', next(tests))
     ranges = loads(f"[{array}]")
@@ -60,9 +50,9 @@ def _get_1d_input():
         print(e)
         sys.exit()
 
-    len_elements, len_ranges = next(tests).split(' ')
-    elements = [int(next(tests)) for _ in range(int(len_elements))]
-    ranges = [parse_range(next(tests)) for _ in range(int(len_ranges))]
+    len_elements, len_ranges = map(int, next(tests).split(' '))
+    elements = [int(next(tests)) for _ in range(len_elements)]
+    ranges = [parse_range(next(tests)) for _ in range(len_ranges)]
     return Tests(elements=elements, ranges=ranges)
 
 
