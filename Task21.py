@@ -130,13 +130,13 @@ class RangeTree:
 """
 
 
-if __name__ == '__main__':
+def main():
     from sanitize_input import get_input
     test_object = get_input()
-    # test = [3, 10, 19, 23, 30, 49, 57, 59, 62, 70, 80, 89, 100, 105]
-    # test = [3, 19, 30, 49, 59, 70, 89, 100]
-    a = RangeTree(test_object.elements)
-    # RangeTree.print2D(find_split_node(a, 3, 19))
     rangeTree = RangeTree(*test_object.elements)
     for lower, upper in test_object.ranges:
         print(' '.join(map(str, rangeTree.one_d_range_query(lower, upper))))
+
+
+if __name__ == '__main__':
+    main()

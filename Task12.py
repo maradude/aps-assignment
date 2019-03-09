@@ -32,9 +32,13 @@ class SortedRangeList:
         return result
 
 
-if __name__ == '__main__':
+def main():
     from sanitize_input import get_input
     test_object = get_input()
     nlist = SortedRangeList(*test_object.elements)
     for lower, upper in test_object.ranges:
         print(' '.join(map(str, nlist.get_range(lower, upper))))
+
+
+if __name__ == '__main__':
+    main()

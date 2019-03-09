@@ -15,7 +15,7 @@ def simple_range_query(points, lbound, ubound):
     return filter(lambda p: check_in_bound(p, lbound, ubound), points)
 
 
-if __name__ == '__main__':
+def main():
     from sanitize_input import get_input
     test_object = get_input('kd')
     tests = zip(test_object.ranges[::2], test_object.ranges[1::2])
@@ -24,3 +24,7 @@ if __name__ == '__main__':
         a = [list(e) for e in (simple_range_query(
             test_object.elements, lower, upper))]
         print(str(a).replace(',', '')[1:-1])
+
+
+if __name__ == '__main__':
+    main()
