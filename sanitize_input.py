@@ -1,11 +1,57 @@
 import sys
 from dataclasses import dataclass  # requires Python 3.7
-from typing import List, Tuple
+from typing import List
+from re import sub
+from json import loads
 
 
-def get_input():
+def get_input(type="1d"):
+    if type == "1d":
+        return _get_1d_input()
+    if type == "kd":
+        return _get_kd_input()
+
+
+def _get_kd_input():
     """
-    Read tests from stdin
+    Read k numbers per line from stdin,
+    first line needs to have amount of points, number of dimensions,
+    and number of test ranges, where ranges are points inside square
+    brackets where 2 brackets for each query denoting min and max values
+    for each dimension.
+
+    e.g. [9 20 5] [99 1000 9] for a 3-dimensional range query
+
+    return object with points and ranges
+    """
+    file = """8 2 1
+3 2
+10 4
+23 6
+30 10
+62 8
+47 14
+105 9
+89 7
+[7 2] [47 12]"""
+    try:
+            tests = (line for line in file.split('\n'))
+    except TypeError as e:
+        print(e)
+        sys.exit()
+    len_points, k_dimensions, len_ranges = next(tests).split(' ')
+    points = []
+    for _ in range(int(len_points)):
+        points.append(tuple(int(n) for n in next(tests).split(' ')))
+    array = sub(' ', ',', next(tests))
+    ranges = loads(f"[{array}]")
+    return Tests(elements=points, ranges=ranges, dimensions=k_dimensions)
+
+
+def _get_1d_input():
+    """
+    Read 1 number per line from stdin,
+    first line needs to have amount of points and ranges
     return object with elements and ranges
     """
     try:
@@ -30,7 +76,8 @@ class Tests:
     just a record to hold elements list and range tuples
     """
     elements: List[int]
-    ranges: List[Tuple[int]]
+    ranges: any
+    dimensions: int = 1
 
 
 if __name__ == '__main__':
