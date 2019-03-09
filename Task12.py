@@ -8,10 +8,9 @@ class SortedRangeList:
         return self._len
 
     def get_range(self, lbound, ubound):
-        # do 2 log n searches, get elements from between
+        # binary search lower bound, then extract element until upper bound
         min_i = SortedRangeList._findStart(self._values, lbound, 0, len(self))
-        max_i = SortedRangeList._findEnd(self._values, ubound, 0, len(self))
-        return self._values[min_i:max_i]
+        return SortedRangeList._get_rest(self._values, min_i, ubound)
 
     @staticmethod
     def _findStart(arr, target, lbound, ubound):
@@ -25,15 +24,12 @@ class SortedRangeList:
             return SortedRangeList._findStart(arr, target, lbound, mid_point-1)
 
     @staticmethod
-    def _findEnd(arr, target, lbound, ubound):
-        # not necessary, can just iterate from findStart until arr[i] > target
-        if lbound > ubound:
-            return lbound
-        mid_point = (lbound+ubound) // 2
-        if arr[mid_point] > target:
-            return SortedRangeList._findEnd(arr, target, lbound, mid_point-1)
-        else:
-            return SortedRangeList._findEnd(arr, target, mid_point+1, ubound)
+    def _get_rest(arr, low_i, ubound):
+        result = []
+        while arr[low_i] <= ubound:
+            result.append(arr[low_i])
+            low_i += 1
+        return result
 
 
 if __name__ == '__main__':
