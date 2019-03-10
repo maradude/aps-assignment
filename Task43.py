@@ -12,6 +12,9 @@ class KDTree:
         left: '_Node' = None
         right: '_Node' = None
 
+        def is_leaf(self):
+            return self.left is None and self.right is None
+
     @staticmethod
     def BuildKDTree(points, current_depth):
         if len(points) == 1:
@@ -47,10 +50,11 @@ class KDTree:
 
 def main():
     from sanitize_input import get_input
-    from print_tree import print2D
+    from print_binary_tree import printTree
     test_object = get_input('kd')
     a = KDTree(test_object.elements)
-    print2D(a.root)
+    printTree(a.root)
+    print(test_object)
 
 
 if __name__ == '__main__':
