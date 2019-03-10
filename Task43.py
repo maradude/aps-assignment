@@ -1,40 +1,57 @@
-"""
-Algorithm 3 Building a KD tree.
-Require: A set of points P, a current depth, d
-  1: function BuildKDTree(P, d)
-  2:    if P contains only one point then
-  3:       return a leaf storing this point
-  4:    end if
-  5:    axis = d modulo the dimensionality of space
-  6:    select a medianPoint from pointlist on dimension axis
-  7:    P l = {p|p ∈ P and p ≤ medianPoint on dimension axis}
-  8:    P r = {p|p ∈ P and p > medianPoint on dimension axis}
-  9:    V l =BuildKDTree(P l , d + 1)
-  10:   V r =BuildKDTree(P r , d + 1)
-  11:   return a node with value medianPoint, left child V l , right child V r
-  12: end function
-"""
+from dataclasses import dataclass
 
 
-class Node:
+class KDTree:
 
-    def __init__(self, value, left, right):
-        self.value = value
-        self.left = left
-        self.right = right
+    def __init__(self, values):
+        self.root = KDTree.BuildKDTree(values, 0)
+
+    @dataclass
+    class _Node:
+        data: int
+        left: '_Node' = None
+        right: '_Node' = None
+
+    @staticmethod
+    def BuildKDTree(points, current_depth):
+        if len(points) == 1:
+            return KDTree._Node(points[0])
+
+        axis = current_depth % len(points[0])
+        medianPoint = KDTree.get_median_point(points, axis)
+
+        left_points = [p for p in points if p[axis] <= medianPoint]
+        right_points = [p for p in points if p[axis] > medianPoint]
+
+        left_child = KDTree.BuildKDTree(left_points, current_depth + 1)
+        right_child = KDTree.BuildKDTree(right_points, current_depth + 1)
+
+        return KDTree._Node(medianPoint, left_child, right_child)
+
+    @staticmethod
+    def integer_median(arr):
+        """
+        median index rounded down
+        not using O(n) implementation cuz python sort
+        beats python implementation of quickselect
+        not to mention variance in lookups of quickselect
+        https://bugs.python.org/issue21592
+        """
+        return sorted(arr)[(len(arr)-1)//2]
+
+    @staticmethod
+    def get_median_point(points, axis):
+        current_axis_points = [point[axis] for point in points]
+        return KDTree.integer_median(current_axis_points)
 
 
-def median():
-    pass
+def main():
+    from sanitize_input import get_input
+    from print_tree import print2D
+    test_object = get_input('kd')
+    a = KDTree(test_object.elements)
+    print2D(a.root)
 
 
-def BuildKDTree(points, current_depth):
-    if len(points) == 1:
-        return  # should return the leaf
-    axis = current_depth % 0  # should be the space dimensionality
-    medianPoint = median(points[axis])  # a median pointin current dimension
-    left_points = filter(lambda p: p[d] <= medianPoint, points)
-    right_points = filter(lambda p: p[d] > medianPoint, points)
-    left_child = BuildKDTree(left_points, current_depth + 1)
-    right_child = BuildKDTree(right_points, current_depth + 1)
-    return Node(medianPoint, left_child, right_child)
+if __name__ == '__main__':
+    main()
