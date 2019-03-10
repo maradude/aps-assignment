@@ -18,12 +18,13 @@ def simple_range_query(points, lbound, ubound):
 def main():
     from sanitize_input import get_input
     test_object = get_input('kd')
-    tests = zip(test_object.ranges[::2], test_object.ranges[1::2])
-    for test in tests:
-        lower, upper = test
-        a = [list(e) for e in (simple_range_query(
-            test_object.elements, lower, upper))]
-        print(str(a).replace(',', '')[1:-1])
+    for test in test_object.ranges:
+        t = zip(test[::2], test[1::2])
+        for test2 in t:
+            lower, upper = test2
+            a = [list(e) for e in (simple_range_query(
+                test_object.elements, lower, upper))]
+            print(str(a).replace(',', '')[1:-1])
 
 
 if __name__ == '__main__':

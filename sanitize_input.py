@@ -48,7 +48,8 @@ def _get_rectangle_kd_input():
         points.append(tuple(int(n) for n in next(tests).split(' ')))
     array = sub(' ', ',', next(tests))
     ranges = loads(f"[{array}]")
-    return Tests(elements=points, ranges=ranges, dimensions=k_dimensions)
+    r = list(zip(ranges[::2], ranges[1::2]))
+    return Tests(elements=points, ranges=r, dimensions=k_dimensions)
 
 
 def _get_1d_input():
