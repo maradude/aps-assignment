@@ -1,19 +1,17 @@
-"""
-Algorithm 5 Algorithm for ﬁnding the intersection.
-Require: minMax1,minMax2 a list with d pairs (where d is the dimension of the space).
-Each pair has the minimum and maximum values for that dimension for the region.
-1: function intersect(minMax1, minMax2)
-2:   for all d in the number of dimensions do
-3:       if not ( minMax2[d][0] ≤ minMax1[d][0] ≤ minMax2[d][1] or
-                  minMax2[d][0] ≤ minMax1[d][1] ≤ minMax2[d][1] or
-                  minMax1[d][0] ≤ minMax2[d][0] ≤ minMax1[d][1] or
-                  minMax1[d][0] ≤ minMax2[d][1] ≤ minMax1[d][1] ) then
-4:          return false
-5:       end if
-6:   end for
-7:   return true
-8: end function
-"""
+from Task21 import RangeTree
+
+
+def intersect(minMax1, minMax2):
+    # list of dimensional sized pairs
+    for d in range(len(minMax1)):
+        if not (minMax2[d][0] <= minMax1[d][0] <= minMax2[d][1] or
+                minMax2[d][0] <= minMax1[d][1] <= minMax2[d][1] or
+                minMax1[d][0] <= minMax2[d][0] <= minMax1[d][1] or
+                minMax1[d][0] <= minMax2[d][1] <= minMax1[d][1]):
+                    return False
+    return True
+
+
 """
 Algorithm 4 Searching a KD-tree
 Require: v a (root) node of the KD tree;
@@ -34,3 +32,33 @@ R the range or region for which points must be reported.
 14:   end if
 15: end function
 """
+
+
+def is_point_in_range(point, range):
+    pass
+
+
+def tree_in_range(node, range):
+    pass
+
+
+def get_all_values(node):
+    return RangeTree.get_tree_values(node)
+
+
+def SearchKDTree(node, region):
+    # TODO: swap extends with appends and then flatMap on return
+    reported_nodes = []
+    if node.is_leaf():
+        if is_point_in_range(node.value, region):
+            reported_nodes.append(node.value)
+    if tree_in_range(node.left, region):
+        reported_nodes.extend(get_all_values(node.left))
+    elif intersect([], []):
+        reported_nodes.extend(SearchKDTree(node.left, region))
+    if tree_in_range(node.right, region):
+        reported_nodes.extend(get_all_values(node.right))
+    elif intersect([], []):
+        reported_nodes.extend(SearchKDTree(node.right, region))
+    return reported_nodes
+
