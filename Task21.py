@@ -103,8 +103,10 @@ class RangeTree:
 
 def main():
     from sanitize_input import get_input
+    from print_binary_tree import printTree
     test_object = get_input()
     rangeTree = RangeTree(*test_object.elements)
+    printTree(rangeTree.root)
     for lower, upper in test_object.ranges:
         print(' '.join(map(str, rangeTree.one_d_range_query(lower, upper))))
 
