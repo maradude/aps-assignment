@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from operator import itemgetter
 
 
 class KDTree:
@@ -17,14 +18,37 @@ class KDTree:
 
     @staticmethod
     def BuildKDTree(points, current_depth):
+        """
+        Code from wikipedia:
+        Wikipedia contributors. (2019, March 8). K-d tree. In Wikipedia,
+        The Free Encyclopedia. Retrieved 18:06, March 10, 2019,
+        from https://en.wikipedia.org/w/index.php?title=K-d_tree&oldid=886834497
+
+        just cuz it's better than my attempt
+        """
+        try:
+            k = len(points[0])  # assumes all points have the same dimension
+        except IndexError:  # if not point_list:
+            return None
         if len(points) == 1:
             return KDTree._Node(points[0])
-
         axis = current_depth % len(points[0])
-        medianPoint = KDTree.get_median_point(points, axis)
+        # axis = current_depth % k
+        points.sort(key=itemgetter(axis))
+        medianPoint = points[(len(points)-1) // 2][axis]  # choose median
+        # Create node and construct subtrees
+        # return KDTree._Node(
+            # data=points[median],
+            # left=KDTree.BuildKDTree(points[:median +1], current_depth + 1),
+            # right=KDTree.BuildKDTree(points[median + 1:], current_depth + 1)
+        # )
 
-        left_points = [p for p in points if p[axis] <= medianPoint]
-        right_points = [p for p in points if p[axis] > medianPoint]
+        # medianPoint = KDTree.get_median_point(points, axis)
+
+        # left_points = [p for p in points if p[axis] <= medianPoint]
+        # right_points = [p for p in points if p[axis] > medianPoint]
+        left_points = points[:((len(points)-1) // 2)+1]
+        right_points = points[((len(points)-1) // 2)+1:]
 
         left_child = KDTree.BuildKDTree(left_points, current_depth + 1)
         right_child = KDTree.BuildKDTree(right_points, current_depth + 1)
@@ -44,6 +68,7 @@ class KDTree:
 
     @staticmethod
     def get_median_point(points, axis):
+        # this should probably be precomputed for all dimensions
         current_axis_points = [point[axis] for point in points]
         return KDTree.integer_median(current_axis_points)
 
@@ -54,7 +79,6 @@ def main():
     test_object = get_input('kd')
     a = KDTree(test_object.elements)
     printTree(a.root)
-    print(test_object)
 
 
 if __name__ == '__main__':
