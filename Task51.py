@@ -1,17 +1,6 @@
 from Task21 import RangeTree
 
 
-def intersect(minMax1, minMax2):
-    # list of dimensional sized pairs
-    for d in range(len(minMax1)):
-        if not (minMax2[d][0] <= minMax1[d][0] <= minMax2[d][1] or
-                minMax2[d][0] <= minMax1[d][1] <= minMax2[d][1] or
-                minMax1[d][0] <= minMax2[d][0] <= minMax1[d][1] or
-                minMax1[d][0] <= minMax2[d][1] <= minMax1[d][1]):
-                    return False
-    return True
-
-
 """
 Algorithm 4 Searching a KD-tree
 Require: v a (root) node of the KD tree;
@@ -34,16 +23,39 @@ R the range or region for which points must be reported.
 """
 
 
-def is_point_in_range(point, range):
-    pass
+def intersect(minMax1, minMax2):
+    for d in range(len(minMax1)):
+        if not (minMax2[d][0] <= minMax1[d][0] <= minMax2[d][1] or
+                minMax2[d][0] <= minMax1[d][1] <= minMax2[d][1] or
+                minMax1[d][0] <= minMax2[d][0] <= minMax1[d][1] or
+                minMax1[d][0] <= minMax2[d][1] <= minMax1[d][1]):
+            return False
+    return True
 
 
-def tree_in_range(node, range):
-    pass
+def is_point_in_range(point, region):
+    def check(d): return region[d][0] <= point[d] <= region[d][1]
+    return all(map(check, range(len(region))))
+
+
+def contained(super_set, sub_set):
+    def check(d, region, point): return (region[d][0] <= point[d][0]
+                                         <= point[d][1] <= region[d][1])
+    return all(check(d, super_set, sub_set) for d in range(len(sub_set)))
 
 
 def get_all_values(node):
     return RangeTree.get_tree_values(node)
+
+
+def min_max(node):
+    # something like (-float(inf), -float(inf),), float(inf), float(inf)
+    # for the root and then smaller for each subsequent node
+    pass
+
+
+def vals():
+    pass
 
 
 def SearchKDTree(node, region):
@@ -52,13 +64,33 @@ def SearchKDTree(node, region):
     if node.is_leaf():
         if is_point_in_range(node.value, region):
             reported_nodes.append(node.value)
-    if tree_in_range(node.left, region):
+    if contained(vals(node).left, region):
         reported_nodes.extend(get_all_values(node.left))
-    elif intersect([], []):
+    elif intersect(vals(node), region):
         reported_nodes.extend(SearchKDTree(node.left, region))
-    if tree_in_range(node.right, region):
+    if contained(vals(node.right), region):
         reported_nodes.extend(get_all_values(node.right))
-    elif intersect([], []):
+    elif intersect([], region):
         reported_nodes.extend(SearchKDTree(node.right, region))
     return reported_nodes
 
+
+def main():
+    from sanitize_input import Tests, get_input
+    from Task43 import KDTree
+    from print_binary_tree import printTree
+    test_object = get_input('kd')
+    # test_object = Tests(elements=[(3, 2), (10, 4), (23, 6), (30, 10), (62, 8),
+    #   (47, 14), (105, 9), (89, 7)],
+    # ranges=[([7, 2], [47, 12]), ([3, 8], [12, 50])],
+    # dimensions=2)
+    tree = KDTree(test_object.elements)
+    printTree(tree.root)
+    for test in test_object.ranges:
+        ranges_by_dimension = list(zip(test[0], test[1]))
+        print(ranges_by_dimension)
+        # SearchKDTree(tree.root, ranges_by_dimension)
+
+
+if __name__ == '__main__':
+    main()
