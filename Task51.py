@@ -1,5 +1,5 @@
 from Task21 import RangeTree
-
+from copy import deepcopy
 
 """
 Algorithm 4 Searching a KD-tree
@@ -64,35 +64,29 @@ def Util(node, region):
     return SearchKDTree(node, region, current_region=bounds, current_depth=0)
 
 
+def new_region(node, region, dimension, bound):
+    region[dimension][bound] = node.data
+    return region
+
+
 def SearchKDTree(node, target_region, current_region, current_depth):
     # TODO: swap extends with appends and then flatMap on return
     # if node.data in [(10, 4), (23, 6), (30, 10)]:
         # print('wow')
     reported_nodes = []
     axis = current_depth % len(target_region)
+
     if node.is_leaf():
         if is_point_in_range(node.data, target_region):
             reported_nodes.append(node.data)
         return reported_nodes
 
-    if node.left.is_leaf():
-        left_region = current_region
-    else:
-        left_region = current_region.copy()
-        left_region[axis][1] = node.data
-    # if contained(left_region, target_region):
-        # reported_nodes.extend(get_all_values(node.left))
+    left_region = new_region(node, deepcopy(current_region), axis, 1)
     if intersect(left_region, target_region):
         reported_nodes.extend(SearchKDTree(
             node.left, target_region, left_region, current_depth+1))
 
-    if node.right.is_leaf():
-        right_region = current_region
-    else:
-        right_region = current_region.copy()
-        right_region[axis][0] = node.data
-    # if contained(right_region, target_region):
-        # reported_nodes.extend(get_all_values(node.right))
+    right_region = new_region(node, deepcopy(current_region), axis, 0)
     if intersect(right_region, target_region):
         reported_nodes.extend(SearchKDTree(
             node.right, target_region, right_region, current_depth+1))
@@ -115,7 +109,7 @@ def main():
     for test in test_object.ranges:
         ranges_by_dimension = list(zip(test[0], test[1]))
         print('query:', *ranges_by_dimension)
-        a=Util(tree.root, ranges_by_dimension)
+        a = Util(tree.root, ranges_by_dimension)
         print(a)
 
 
