@@ -1,27 +1,6 @@
 from Task21 import RangeTree
 from copy import deepcopy
 
-"""
-Algorithm 4 Searching a KD-tree
-Require: v a (root) node of the KD tree;
-R the range or region for which points must be reported.
-1: function SearchKDTree(v, R)
-2:   if v is a leaf then
-3:     check if point stored in v lies in R, and return it if so.
-4:   end if
-5:   if the region of the left child of v is fully contained in R then
-6:     report the subtree of the left child of v
-7:   else if the region of the left child of v intersects R then
-8:     SearchKDTree(left child of v,R)
-9:    end if
-10:   if the region of the right child of v is fully contained in R then
-11:     report the subtree of the right child of v
-12:   else if the region of the right child of v intersects R then
-13:     SearchKDTree(right child of v,R)
-14:   end if
-15: end function
-"""
-
 
 def intersect(minMax1, minMax2):
     # each dimensions lowest value, highest value
@@ -49,16 +28,6 @@ def get_all_values(node):
     return RangeTree.get_tree_values(node)
 
 
-def min_max(node):
-    # something like (-float(inf), -float(inf),), float(inf), float(inf)
-    # for the root and then smaller for each subsequent node
-    pass
-
-
-def vals():
-    pass
-
-
 def Util(node, region):
     bounds = [[0, float('inf')] for _ in range(len(region))]
     return SearchKDTree(node, region, current_region=bounds, current_depth=0)
@@ -72,7 +41,7 @@ def new_region(node, region, dimension, bound):
 def SearchKDTree(node, target_region, current_region, current_depth):
     # TODO: swap extends with appends and then flatMap on return
     # if node.data in [(10, 4), (23, 6), (30, 10)]:
-        # print('wow')
+    # TODO: replace hardcopy() with something more efficient
     reported_nodes = []
     axis = current_depth % len(target_region)
 
@@ -82,12 +51,18 @@ def SearchKDTree(node, target_region, current_region, current_depth):
         return reported_nodes
 
     left_region = new_region(node, deepcopy(current_region), axis, 1)
-    if intersect(left_region, target_region):
+    if contained(target_region, left_region):
+        reported_nodes.extend(get_all_values(node.left))
+
+    elif intersect(left_region, target_region):
         reported_nodes.extend(SearchKDTree(
             node.left, target_region, left_region, current_depth+1))
 
     right_region = new_region(node, deepcopy(current_region), axis, 0)
-    if intersect(right_region, target_region):
+    if contained(target_region, right_region):
+        reported_nodes.extend(get_all_values(node.right))
+
+    elif intersect(right_region, target_region):
         reported_nodes.extend(SearchKDTree(
             node.right, target_region, right_region, current_depth+1))
 
@@ -100,17 +75,21 @@ def main():
     from print_binary_tree import printTree
     test_object = get_input('kd')
     # test_object = Tests(elements=[(3, 2), (10, 4), (23, 6), (30, 10), (62, 8),
-    #   (47, 14), (105, 9), (89, 7)],
-    # ranges=[([7, 2], [47, 12]), ([3, 8], [12, 50]), ([0, 0], [100, 100])],
-    # dimensions=2)
+                                 #  (47, 14), (105, 9), (89, 7)],
+    # test_object = Tests(elements=[(0, 1), (0, 3), (0, 6), (0, 2), (0, 8),
+                                #   (0, 4), (0, 9), (9, 7), (0, 11), (0, 99),
+                                #   (0, 75), (0, 77)],
+                        # ranges=[([7, 2], [47, 12]), ([3, 8], [12, 50]),
+                                # ([0, 0], [100, 100])],
+                        # dimensions=2)
     tree = KDTree(test_object.elements)
-    printTree(tree.root)
-    # expected (10,4), (23,6), (30,10)
+    # printTree(tree.root)
     for test in test_object.ranges:
         ranges_by_dimension = list(zip(test[0], test[1]))
-        print('query:', *ranges_by_dimension)
+        # print('query:', *ranges_by_dimension)
         a = Util(tree.root, ranges_by_dimension)
-        print(a)
+        b = [list(e) for e in (a)]
+        print(str(b).replace(',', '')[1:-1])
 
 
 if __name__ == '__main__':
