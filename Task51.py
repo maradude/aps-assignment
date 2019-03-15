@@ -24,6 +24,7 @@ R the range or region for which points must be reported.
 
 
 def intersect(minMax1, minMax2):
+    # each dimensions lowest value, highest value
     for d in range(len(minMax1)):
         if not (minMax2[d][0] <= minMax1[d][0] <= minMax2[d][1] or
                 minMax2[d][0] <= minMax1[d][1] <= minMax2[d][1] or
@@ -58,38 +59,64 @@ def vals():
     pass
 
 
-def SearchKDTree(node, region):
+def Util(node, region):
+    bounds = [[0, float('inf')] for _ in range(len(region))]
+    return SearchKDTree(node, region, current_region=bounds, current_depth=0)
+
+
+def SearchKDTree(node, target_region, current_region, current_depth):
     # TODO: swap extends with appends and then flatMap on return
+    # if node.data in [(10, 4), (23, 6), (30, 10)]:
+        # print('wow')
     reported_nodes = []
+    axis = current_depth % len(target_region)
     if node.is_leaf():
-        if is_point_in_range(node.value, region):
-            reported_nodes.append(node.value)
-    if contained(vals(node).left, region):
-        reported_nodes.extend(get_all_values(node.left))
-    elif intersect(vals(node), region):
-        reported_nodes.extend(SearchKDTree(node.left, region))
-    if contained(vals(node.right), region):
-        reported_nodes.extend(get_all_values(node.right))
-    elif intersect([], region):
-        reported_nodes.extend(SearchKDTree(node.right, region))
+        if is_point_in_range(node.data, target_region):
+            reported_nodes.append(node.data)
+        return reported_nodes
+
+    if node.left.is_leaf():
+        left_region = current_region
+    else:
+        left_region = current_region.copy()
+        left_region[axis][1] = node.data
+    # if contained(left_region, target_region):
+        # reported_nodes.extend(get_all_values(node.left))
+    if intersect(left_region, target_region):
+        reported_nodes.extend(SearchKDTree(
+            node.left, target_region, left_region, current_depth+1))
+
+    if node.right.is_leaf():
+        right_region = current_region
+    else:
+        right_region = current_region.copy()
+        right_region[axis][0] = node.data
+    # if contained(right_region, target_region):
+        # reported_nodes.extend(get_all_values(node.right))
+    if intersect(right_region, target_region):
+        reported_nodes.extend(SearchKDTree(
+            node.right, target_region, right_region, current_depth+1))
+
     return reported_nodes
 
 
 def main():
-    from sanitize_input import Tests, get_input
+    from sanitize_input import get_input, Tests
     from Task43 import KDTree
     from print_binary_tree import printTree
     test_object = get_input('kd')
     # test_object = Tests(elements=[(3, 2), (10, 4), (23, 6), (30, 10), (62, 8),
     #   (47, 14), (105, 9), (89, 7)],
-    # ranges=[([7, 2], [47, 12]), ([3, 8], [12, 50])],
+    # ranges=[([7, 2], [47, 12]), ([3, 8], [12, 50]), ([0, 0], [100, 100])],
     # dimensions=2)
     tree = KDTree(test_object.elements)
     printTree(tree.root)
+    # expected (10,4), (23,6), (30,10)
     for test in test_object.ranges:
         ranges_by_dimension = list(zip(test[0], test[1]))
-        print(ranges_by_dimension)
-        # SearchKDTree(tree.root, ranges_by_dimension)
+        print('query:', *ranges_by_dimension)
+        a=Util(tree.root, ranges_by_dimension)
+        print(a)
 
 
 if __name__ == '__main__':
