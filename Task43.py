@@ -26,10 +26,6 @@ class KDTree:
 
         just cuz it's better than my attempt
         """
-        try:
-            k = len(points[0])  # assumes all points have the same dimension
-        except IndexError:  # if not point_list:
-            return None
         if len(points) == 1:
             return KDTree._Node(points[0])
         axis = current_depth % len(points[0])
