@@ -29,7 +29,7 @@ def get_all_values(node):
 
 
 def Util(node, region):
-    bounds = [[0, float('inf')] for _ in range(len(region))]
+    bounds = [[float('-inf'), float('inf')] for _ in range(len(region))]
     return SearchKDTree(node, region, current_region=bounds, current_depth=0)
 
 
@@ -83,7 +83,7 @@ def main():
                                 # ([0, 0], [100, 100])],
                         # dimensions=2)
     tree = KDTree(test_object.elements)
-    # printTree(tree.root)
+    printTree(tree.root)
     for test in test_object.ranges:
         ranges_by_dimension = list(zip(test[0], test[1]))
         # print('query:', *ranges_by_dimension)
