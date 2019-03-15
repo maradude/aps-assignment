@@ -9,9 +9,7 @@ def get_input(type="1d"):
     if type == "1d":
         return _get_1d_input()
     if type == "kd":
-        return _get_rectangle_kd_input()
-    if type == "ckd":
-        return _get_circular_kd_input()
+        return _get_kd_input()
     if type == "pkd":
         return _get_polygonal_kd_input()
 
@@ -20,22 +18,7 @@ def _get_polygonal_kd_input():
     pass
 
 
-def _get_circular_kd_input():
-    pass
-
-
-def _get_rectangle_kd_input():
-    """
-    Read k numbers per line from stdin,
-    first line needs to have amount of points, number of dimensions,
-    and number of test ranges, where ranges are points inside square
-    brackets where 2 brackets for each query denoting min and max values
-    for each dimension.
-
-    e.g. [9 20 5] [99 1000 9] for a 3-dimensional range query
-
-    return object with points and ranges
-    """
+def _get_kd_tree_parts():
     try:
         tests = (line for line in sys.stdin)
     except TypeError as e:
@@ -46,6 +29,25 @@ def _get_rectangle_kd_input():
     points = []
     for _ in range(len_points):
         points.append(tuple(int(n) for n in next(tests).split(' ')))
+    return tests, points, k_dimensions
+
+
+def _get_kd_input():
+    """
+    Read k numbers per line from stdin,
+    first line needs to have amount of points, number of dimensions,
+    and number of test ranges, subsequent q lines are points
+    line after q are the tests cases where each test case needs
+    be made of 2 elements, either a pairs of brackets for each query
+    denoting min and max values for each dimension or for spherical
+    cases brackets with kd point followed by a integer denoting radius
+
+    e.g. "[9 20 5] [99 1000 9]" for a 3-dimensional rectange range query
+    "[10 -20 30 40] 5" for a 4-dimensional sphere range suery
+
+    return object with points and ranges
+    """
+    tests, points, k_dimensions = _get_kd_tree_parts()
     array = sub(' ', ',', next(tests))
     ranges = loads(f"[{array}]")
     r = list(zip(ranges[::2], ranges[1::2]))
