@@ -82,6 +82,6 @@ def main():
 
 
 if __name__ == '__main__':
-    from sanitize_input import get_input, Tests
+    from sanitize_input import get_input
     test_object = get_input('kd')
     main()
