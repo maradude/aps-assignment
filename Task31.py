@@ -16,8 +16,6 @@ def simple_range_query(points, lbound, ubound):
 
 
 def main():
-    from sanitize_input import get_input
-    test_object = get_input('kd')
     for test in test_object.ranges:
         t = zip(test[::2], test[1::2])
         for test2 in t:
@@ -28,4 +26,6 @@ def main():
 
 
 if __name__ == '__main__':
+    from sanitize_input import get_input
+    test_object = get_input('kd')
     main()

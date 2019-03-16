@@ -50,12 +50,12 @@ class KDTree:
 
 
 def main():
-    from sanitize_input import get_input
     from print_binary_tree import printTree
-    test_object = get_input('kd')
     a = KDTree(test_object.elements)
     printTree(a.root)
 
 
 if __name__ == '__main__':
+    from sanitize_input import get_input
+    test_object = get_input('kd')
     main()

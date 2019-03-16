@@ -5,7 +5,7 @@ from math import ceil
 class RangeTree:
     # TODO: should probably combine _Node and RangeTree
 
-    def __init__(self, *values):
+    def __init__(self, values):
         self.root = RangeTree.build(sorted(values))
 
     @dataclass()
@@ -102,14 +102,14 @@ class RangeTree:
 
 
 def main():
-    from sanitize_input import get_input
-    from print_binary_tree import printTree
-    test_object = get_input()
-    rangeTree = RangeTree(*test_object.elements)
-    printTree(rangeTree.root)
+    # from print_binary_tree import printTree
+    rangeTree = RangeTree(test_object.elements)
+    # printTree(rangeTree.root)
     for lower, upper in test_object.ranges:
         print(' '.join(map(str, rangeTree.one_d_range_query(lower, upper))))
 
 
 if __name__ == '__main__':
+    from sanitize_input import get_input
+    test_object = get_input()
     main()

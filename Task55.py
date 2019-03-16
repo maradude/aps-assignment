@@ -1,6 +1,4 @@
-# build square with sides of n where n in r2 of circle
-# then do O(n) search of area
-from math import sqrt
+# build square surrounding spehere, O(n) aditional cost
 
 
 def point_in_sphere(test, point, radius):
@@ -14,10 +12,8 @@ def spehere_to_square(point, radius):
 
 def main():
     from Task51 import Util
-    from sanitize_input import get_input, Tests
     from Task43 import KDTree
-    from print_binary_tree import printTree
-    test_object = get_input('kd')
+#     from print_binary_tree import printTree
     tree = KDTree(test_object.elements)
     # printTree(tree.root)
     for test in test_object.ranges:
@@ -28,4 +24,6 @@ def main():
 
 
 if __name__ == '__main__':
+    from sanitize_input import get_input
+    test_object = get_input('kd')
     main()

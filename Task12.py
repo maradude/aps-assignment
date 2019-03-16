@@ -1,6 +1,6 @@
 class SortedRangeList:
 
-    def __init__(self, *args):
+    def __init__(self, args):
         self._values = list(sorted(args))
         self._len = len(self._values)
 
@@ -33,12 +33,12 @@ class SortedRangeList:
 
 
 def main():
-    from sanitize_input import get_input
-    test_object = get_input()
-    nlist = SortedRangeList(*test_object.elements)
+    nlist = SortedRangeList(test_object.elements)
     for lower, upper in test_object.ranges:
         print(' '.join(map(str, nlist.get_range(lower, upper))))
 
 
 if __name__ == '__main__':
+    from sanitize_input import get_input
+    test_object = get_input()
     main()
