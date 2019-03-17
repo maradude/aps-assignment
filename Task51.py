@@ -24,8 +24,8 @@ def contained(super_set, sub_set):
     return all(check(d, super_set, sub_set) for d in range(len(sub_set)))
 
 
-def get_all_values(node):
-    return RangeTree.get_tree_values(node)
+def get_all_values(array, node):
+    return RangeTree.get_tree_values(array, node)
 
 
 def Util(node, region):
@@ -52,7 +52,7 @@ def SearchKDTree(node, target_region, current_region, current_depth):
 
     left_region = new_region(node, deepcopy(current_region), axis, 1)
     if contained(target_region, left_region):
-        reported_nodes.extend(get_all_values(node.left))
+        reported_nodes.extend(get_all_values(reported_nodes, node.left))
 
     elif intersect(left_region, target_region):
         reported_nodes.extend(SearchKDTree(
@@ -60,7 +60,7 @@ def SearchKDTree(node, target_region, current_region, current_depth):
 
     right_region = new_region(node, deepcopy(current_region), axis, 0)
     if contained(target_region, right_region):
-        reported_nodes.extend(get_all_values(node.right))
+        reported_nodes.extend(get_all_values(reported_nodes, node.right))
 
     elif intersect(right_region, target_region):
         reported_nodes.extend(SearchKDTree(

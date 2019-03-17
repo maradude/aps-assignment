@@ -67,7 +67,7 @@ class RangeTree:
         node = split_node.left
         while not node.is_leaf():
             if lbound <= node.data:
-                reported_nodes.extend(RangeTree.get_tree_values(node.right))
+                RangeTree.get_tree_values(reported_nodes, node.right)
                 node = node.left
             else:
                 node = node.right
@@ -76,7 +76,7 @@ class RangeTree:
         node = split_node.right
         while not node.is_leaf():
             if ubound >= node.data:
-                reported_nodes.extend(RangeTree.get_tree_values(node.left))
+                RangeTree.get_tree_values(reported_nodes, node.left)
                 node = node.right
             else:
                 node = node.left
@@ -85,20 +85,16 @@ class RangeTree:
         return reported_nodes
 
     @staticmethod
-    def get_tree_values(root):
-        # modified version of https://code.activestate.com/recipes/579138-simple-breadth-first-depth-first-tree-traversal/
-        nodes = []
+    def get_tree_values(array, root):
         stack = [root]
         while stack:
-            cur_node = stack[0]
-            stack = stack[1:]
+            cur_node = stack.pop()
             if cur_node.is_leaf():
-                nodes.append(cur_node.data)
-            if cur_node.right is not None:
+                array.append(cur_node.data)
+            elif cur_node.right is not None:
                 stack.append(cur_node.right)
-            if cur_node.left is not None:
+            elif cur_node.left is not None:
                 stack.append(cur_node.left)
-        return nodes
 
 
 def main():
