@@ -10,7 +10,20 @@ class SortedRangeList:
     def get_range(self, lbound, ubound):
         # binary search lower bound, then extract element until upper bound
         min_i = SortedRangeList._findStart(self._values, lbound, 0, len(self))
-        return SortedRangeList._get_rest(self._values, min_i, ubound)
+        # hi_i = SortedRangeList._get_rest(self._values, min_i, ubound) + 1
+        hi_i = SortedRangeList._findEnd(self._values, ubound, min_i, len(self))
+        return self._values[min_i:hi_i]
+        # return SortedRangeList._get_rest(self._values, min_i, ubound)
+
+    def _findEnd(arr, target, lbound, hbound):
+        # find the index of the last occurance of k in the array
+        if lbound > hbound:
+            return lbound
+        mid_point = (lbound+hbound) // 2
+        if arr[mid_point] > target:
+            return SortedRangeList._findEnd(arr, target, lbound, mid_point-1)
+        else:
+            return SortedRangeList._findEnd(arr, target, mid_point+1, hbound)
 
     @staticmethod
     def _findStart(arr, target, lbound, ubound):
@@ -25,11 +38,10 @@ class SortedRangeList:
 
     @staticmethod
     def _get_rest(arr, low_i, ubound):
-        result = []
-        while arr[low_i] <= ubound:
-            result.append(arr[low_i])
-            low_i += 1
-        return result
+        hi_i = low_i
+        while arr[hi_i] <= ubound:
+            hi_i += 1
+        return hi_i
 
 
 def main():
