@@ -1,3 +1,7 @@
 .ipynb_checkpoints/*
 __pycache__/*
 .vscode/.ropeproject/config.py
+*.pyc
+*.png
+tests/predfined_large_arrays.py
+tests/predfined_random_data.py
