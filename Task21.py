@@ -63,7 +63,7 @@ class RangeTree:
         if split_node.is_leaf():
             if lbound <= split_node.data <= ubound:
                 reported_nodes.append(split_node.data)
-                return reported_nodes
+            return reported_nodes
         node = split_node.left
         while not node.is_leaf():
             if lbound <= node.data:
@@ -91,10 +91,12 @@ class RangeTree:
             cur_node = stack.pop()
             if cur_node.is_leaf():
                 array.append(cur_node.data)
-            elif cur_node.right is not None:
-                stack.append(cur_node.right)
-            elif cur_node.left is not None:
-                stack.append(cur_node.left)
+            else:
+                if cur_node.right is not None:
+                    stack.append(cur_node.right)
+                if cur_node.left is not None:
+                    stack.append(cur_node.left)
+        return array
 
 
 def main():
@@ -108,4 +110,5 @@ def main():
 if __name__ == '__main__':
     from sanitize_input import get_input
     test_object = get_input()
+    # print(test_object)
     main()
