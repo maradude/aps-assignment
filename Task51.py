@@ -43,7 +43,8 @@ def contained(super_set, sub_set):
         :return: Bool True if sub_set is a sub set of super_set
 
     """
-    def check(d, region, point): return (region[d][0] <= point[val(0, d)] <= point[val(1, d)] <= region[d][1])
+    def check(d, region, point): return (
+        region[d][0] <= point[val(0, d)] <= point[val(1, d)] <= region[d][1])
     return all(check(d, super_set, sub_set) for d in range(len(super_set)))
 
 
