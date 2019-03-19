@@ -1,8 +1,17 @@
+"""
+Create a balanced binary search tree from a sorted list of values.
+Each internal node is given the value of the median index (rounded down) and are not
+returned by range search are only used for guiding search.
+Leaves contain actual values returned by range searches.
+"""
+
+
 from dataclasses import dataclass  # requires Python 3.7
 from math import ceil
 
 
 class RangeTree:
+    """ """
     # TODO: should probably combine _Node and RangeTree
 
     def __init__(self, values):
@@ -10,17 +19,20 @@ class RangeTree:
 
     @dataclass()
     class _Node:
+        """ """
         data: int
         left: '_Node' = None
         right: '_Node' = None
 
         def is_leaf(self):
+            """
+            maybe should be a parameter?
+            """
             return self.left is None or self.right is None
 
     @staticmethod
     def build(arr):
-        """
-        This function based on the following paper
+        """This function based on the following paper
         @inproceedings{lueker1978data,
             title={A data structure for orthogonal range queries},
             author={Lueker, George S},
@@ -29,6 +41,10 @@ class RangeTree:
             year={1978},
             organization={IEEE}
         }
+
+        :param arr: List[Sortable]
+        :return: root node of newly created tree
+
         """
         length = len(arr)
         if length < 3:
@@ -46,6 +62,12 @@ class RangeTree:
         return root
 
     def find_split_node(self, lbound, ubound):
+        """
+
+        :param lbound: Sortable lower bound
+        :param ubound: Sortable upper bound
+        :return: _Node, smallest shared ancestor of of all range query results
+        """
         node = self.root
         splitting_value = int(node.data)
         while not node.is_leaf() and (ubound <= splitting_value or
@@ -58,6 +80,13 @@ class RangeTree:
         return node
 
     def one_d_range_query(self, lbound, ubound):
+        """
+
+        :param lbound: Sortable lower bound
+        :param ubound: Sortable upper bound
+        :result: List[Sortable] all values in tree between lbound and ubound inclusive
+
+        """
         reported_nodes = []
         split_node = self.find_split_node(lbound, ubound)
         if split_node.is_leaf():
@@ -86,6 +115,12 @@ class RangeTree:
 
     @staticmethod
     def get_tree_values(array, root):
+        """
+        Perform DFS traversal to get all leaf values from subtree
+        :param array: List[Sortable], list to populate with values from subtree
+        :param root: _Node to use as root of subtree
+        :return: array with newly added values from subtree
+        """
         stack = [root]
         while stack:
             cur_node = stack.pop()
@@ -100,6 +135,10 @@ class RangeTree:
 
 
 def main():
+    """
+    perform range query for all ranges in test_object
+    print each query result in a new line
+    """
     # from print_binary_tree import printTree
     rangeTree = RangeTree(test_object.elements)
     # printTree(rangeTree.root)

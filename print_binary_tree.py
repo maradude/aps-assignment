@@ -8,10 +8,23 @@ import functools as fn
 
 
 def printTree(node):
+    """
+
+    :param node: 
+
+    """
     printBTree(node, lambda n: (str(n.data), n.left, n.right))
 
 
 def printBTree(node, nodeInfo=None, inverted=False, isTop=True):
+    """
+
+    :param node: 
+    :param nodeInfo:  (Default value = None)
+    :param inverted:  (Default value = False)
+    :param isTop:  (Default value = True)
+
+    """
 
     # node value string and sub nodes
     stringValue, leftNode, rightNode = nodeInfo(node)

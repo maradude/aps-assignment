@@ -6,6 +6,7 @@ import random
 
 
 class TestRangeTree(TestCase):
+    """ """
 
     # def test1(self):
     #     a = Tests(elements=[3, 10, 23, 30, 62, 47, 105, 89],
@@ -15,6 +16,7 @@ class TestRangeTree(TestCase):
     #     self.assertEqual(sorted(expected), sorted(real))
 
     def test2(self):
+        """ """
         # b = [random.randrange(0, 1000, 1) for e in range(1000)]
         b = [623, 661, 691, 116, 333, 366, 631, 423, 712, 764]
         c = [(0, 100)]

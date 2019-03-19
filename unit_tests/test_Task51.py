@@ -6,8 +6,10 @@ import random
 
 
 class TestKDTree(TestCase):
+    """ """
 
     def test2(self):
+        """ """
         e = [[24, 534],
              [30, 671],
              [45, 377],

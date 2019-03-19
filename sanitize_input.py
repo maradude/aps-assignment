@@ -6,6 +6,13 @@ from typing import List
 
 
 def get_input(type="1d"):
+    """
+
+    :param type: type of input request (Default value = "1d")
+                 '1d' = 1-dimensional
+                 'kd' = k-dimensional
+                 'pkd' = polygonal k-dimensional
+    """
     if type == "1d":
         return _get_1d_input()
     if type == "kd":
@@ -15,10 +22,15 @@ def get_input(type="1d"):
 
 
 def _get_polygonal_kd_input():
+    """ """
     pass
 
 
 def _get_kd_tree_parts():
+    """
+    read standard input for
+    :return tests, points and dimensionality of given input
+    """
     try:
         tests = (line for line in sys.stdin)
     except TypeError as e:
@@ -33,8 +45,7 @@ def _get_kd_tree_parts():
 
 
 def _get_kd_input():
-    """
-    Read k numbers per line from stdin,
+    """Read k numbers per line from stdin,
     first line needs to have amount of points, number of dimensions,
     and number of test ranges, subsequent q lines are points
     line after q are the tests cases where each test case needs
@@ -45,7 +56,9 @@ def _get_kd_input():
     e.g. "[9 20 5] [99 1000 9]" for a 3-dimensional rectange range query
     "[10 -20 30 40] 5" for a 4-dimensional sphere range suery
 
-    return object with points and ranges
+    :return: Test data object with points, ranges and dimensionality
+
+
     """
     tests, points, k_dimensions = _get_kd_tree_parts()
     array = sub(' ', ',', next(tests))
@@ -56,9 +69,12 @@ def _get_kd_input():
 
 def _get_1d_input():
     """
-    Read 1 number per line from stdin,
-    first line needs to have amount of points and ranges
-    return object with elements and ranges
+    Read from standard input values and ranges
+    first line is an interger value of how many values x and ranges y
+    next x lines are integer values to be used as points
+    next y lines have integer range pairs
+
+    :return: Tets data object with points and ranges
     """
     try:
         tests = (line for line in sys.stdin)
@@ -73,14 +89,18 @@ def _get_1d_input():
 
 
 def parse_range(range_string):
+    """
+
+    :param range_string: String
+    :return: Tuple[int]
+
+    """
     return tuple(int(e) for e in range_string.split(' '))
 
 
 @dataclass
 class Tests:
-    """
-    just a record to hold elements list and range tuples
-    """
+    """just a record to hold elements list and range tuples"""
     elements: List
     ranges: List
     dimensions: int = 1

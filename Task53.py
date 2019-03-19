@@ -1,8 +1,22 @@
+"""
+This file is just used to benchmark difference between KDRangeSearch
+with and without the contained function, please don't read further into it
+due to lack of documentation, you can have a look at line 131-141 to see commented
+contained() call
+"""
+
+
 from Task21 import RangeTree
 from copy import deepcopy
 
 
 def intersect(minMax1, minMax2):
+    """
+
+    :param minMax1:
+    :param minMax2:
+
+    """
     # each dimensions lowest value, highest value
     for d in range(len(minMax2)):
         if not (minMax2[d][0] <= minMax1[val(0, d)] <= minMax2[d][1] or
@@ -14,26 +28,63 @@ def intersect(minMax1, minMax2):
 
 
 def is_point_in_range(point, region):
+    """
+
+    :param point:
+    :param region:
+
+    """
     def check(d): return region[d][0] <= point[d] <= region[d][1]
     return all(map(check, range(len(region))))
 
 
 def contained(super_set, sub_set):
+        """
+
+        :param d): return region[d][0] <:  (Default value = point[d] <= region[d][1]return all(map(check)
+        :param range(len(region))))contained(super_set:
+        :param sub_set:
+
+        """
     def check(d, region, point): return (region[d][0] <= point[val(0, d)]
                                          <= point[val(1, d)] <= region[d][1])
     return all(check(d, super_set, sub_set) for d in range(len(super_set)))
 
 
 def get_all_values(array, node):
+        """
+
+        :param d:
+        :param region:
+        :param point): return (region[d][0] <:  (Default value = point[val(0)
+        :param d)]<:  (Default value = point[val(1)
+        :param d)] <:  (Default value = region[d][1])return all(check(d)
+        :param super_set:
+        :param sub_set) for d in range(len(super_set)))get_all_values(array:
+        :param node:
+
+        """
     RangeTree.get_tree_values(array, node)
 
 
 def get_range(node, region):
+    """
+
+    :param node:
+    :param region:
+
+    """
     bounds = [float('-inf'), float('inf')]*len(region)
     return SearchKDTree(node, region, current_region=bounds, current_depth=0)
 
 
 def val(bound, dimension):
+    """
+
+    :param bound:
+    :param dimension:
+
+    """
     # row-major indexing
     return dimension*2 + bound
 
@@ -43,6 +94,14 @@ def val(bound, dimension):
 
 
 def new_region(value, region, dimension, bound):
+    """
+
+    :param value:
+    :param region:
+    :param dimension:
+    :param bound:
+
+    """
     # funky indexing so I don't have to make deepcopies
     new_region = []
     new_region.extend(region)
@@ -51,6 +110,14 @@ def new_region(value, region, dimension, bound):
 
 
 def SearchKDTree(node, target_region, current_region, current_depth):
+    """
+
+    :param node:
+    :param target_region:
+    :param current_region:
+    :param current_depth:
+
+    """
     # TODO: swap extends with appends and then flatMap on return
     # if node.data in [(10, 4), (23, 6), (30, 10)]:
     # TODO: replace hardcopy() with something more efficient
@@ -82,6 +149,7 @@ def SearchKDTree(node, target_region, current_region, current_depth):
 
 
 def main():
+    """ """
     from Task43 import KDTree
     # from print_binary_tree import printTree
     tree = KDTree(test_object.elements)
