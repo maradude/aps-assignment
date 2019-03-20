@@ -13,6 +13,7 @@ def point_in_sphere(test, point, radius):
     :param radius: int radius of the n-sphere
 
     """
+    # some math to check if a given point is in radius
     d = sum(abs(a - b) for a, b in zip(test, point))
     return d < radius
 

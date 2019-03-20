@@ -4,7 +4,7 @@ where k mandates dimensionality of tree
 """
 
 
-from dataclasses import dataclass
+from dataclasses import dataclass  # requires python 3.7
 from operator import itemgetter
 
 
@@ -35,10 +35,14 @@ class KDTree:
         :return: root node of newly created tree
 
         """
+        # base case
         if len(points) == 1:
             return KDTree._Node(points[0])
+
+        # recursive case
         axis = current_depth % len(points[0])
         points.sort(key=itemgetter(axis))  # should be precomputed
+
         medianPoint = points[(len(points)-1) // 2][axis]
         left_points = points[:((len(points)-1) // 2)+1]
         right_points = points[((len(points)-1) // 2)+1:]

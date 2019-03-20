@@ -38,8 +38,12 @@ class SortedRangeList:
         :return int index position of largest element smaller or equal to target
         """
         # find the index of the last occurance of k in the array
+
+        # base case
         if lbound > hbound:
             return lbound
+
+        # recursive case
         mid_point = (lbound+hbound) // 2
         if arr[mid_point] > target:
             return SortedRangeList._findEnd(arr, target, lbound, mid_point-1)
@@ -58,8 +62,12 @@ class SortedRangeList:
 
         """
         # it's the left most k algorithm, lifted from slides pseudocode
+
+        # base case
         if ubound < lbound:
             return lbound
+
+        # recursive case
         mid_point = (lbound+ubound) // 2
         if arr[mid_point] < target:
             return SortedRangeList._findStart(arr, target, mid_point+1, ubound)

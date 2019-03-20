@@ -109,13 +109,17 @@ def SearchKDTree(node, target_region, current_region, current_depth):
     :return: List[List[Sortable]] values in KDTree that are between bounds decared in target_region
     """
     reported_nodes = []
-    axis = current_depth % len(target_region)
 
+    # base case
     if node.is_leaf():
         if is_point_in_range(node.data, target_region):
             reported_nodes.append(node.data)
         return reported_nodes
 
+    # recursive case
+    axis = current_depth % len(target_region)
+
+    # left child
     left_region = new_region(node, current_region, axis, 1)
     if contained(target_region, left_region):
         get_all_values(reported_nodes, node.left)
@@ -124,6 +128,7 @@ def SearchKDTree(node, target_region, current_region, current_depth):
         reported_nodes.extend(SearchKDTree(
             node.left, target_region, left_region, current_depth+1))
 
+    # right child
     right_region = new_region(node, current_region, axis, 0)
     if contained(target_region, right_region):
         get_all_values(reported_nodes, node.right)

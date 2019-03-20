@@ -47,12 +47,16 @@ class RangeTree:
 
         """
         length = len(arr)
+
+        # base case
         if length < 3:
             root = RangeTree._Node(arr[0])
             if length == 2:
                 root.left = RangeTree._Node(arr[0])
                 root.right = RangeTree._Node(arr[-1])
             return root
+
+        # recursive case
         midp = ceil(length / 2) - 1
         left = arr[:midp+1]
         right = arr[midp+1:]
@@ -70,6 +74,7 @@ class RangeTree:
         """
         node = self.root
         splitting_value = int(node.data)
+        # check if largest common ancestor has been found
         while not node.is_leaf() and (ubound <= splitting_value or
                                       lbound > splitting_value):
             if ubound <= splitting_value:
@@ -88,11 +93,16 @@ class RangeTree:
 
         """
         reported_nodes = []
+        # get largest common ancestor
         split_node = self.find_split_node(lbound, ubound)
+
+        # return early if it doesn't have decendants
         if split_node.is_leaf():
             if lbound <= split_node.data <= ubound:
                 reported_nodes.append(split_node.data)
             return reported_nodes
+
+        # get relevant values from left child
         node = split_node.left
         while not node.is_leaf():
             if lbound <= node.data:
@@ -102,6 +112,8 @@ class RangeTree:
                 node = node.right
         if node.data >= lbound:
             reported_nodes.append(node.data)
+
+        # get relevant values from right child
         node = split_node.right
         while not node.is_leaf():
             if ubound >= node.data:
@@ -111,6 +123,7 @@ class RangeTree:
                 node = node.left
         if node.data <= ubound:
             reported_nodes.append(node.data)
+
         return reported_nodes
 
     @staticmethod
