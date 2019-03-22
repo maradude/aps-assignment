@@ -24,8 +24,17 @@ class SortedRangeList:
         :return List[Sortable] all values contained in self, between lower and upper bound inclusive
 
         """
-        min_i = SortedRangeList._findStart(self._values, lbound, 0, len(self))
-        hi_i = SortedRangeList._findEnd(self._values, ubound, min_i, len(self))
+        largest_element = self._values[-1]
+        # helps with index errors
+        if largest_element < lbound:
+            min_i = len(self)
+        else:
+            min_i = SortedRangeList._findStart(self._values, lbound, 0, len(self))
+        if largest_element <= ubound:
+            hi_i = len(self)
+        else:
+            hi_i = SortedRangeList._findEnd(self._values, ubound, min_i, len(self))
+
         return self._values[min_i:hi_i]
 
     def _findEnd(arr, target, lbound, hbound):
@@ -39,12 +48,13 @@ class SortedRangeList:
         """
         # find the index of the last occurance of k in the array
 
-        # base case
+        # base case 1
         if lbound > hbound:
             return lbound
 
-        # recursive case
         mid_point = (lbound+hbound) // 2
+
+        # recursive case
         if arr[mid_point] > target:
             return SortedRangeList._findEnd(arr, target, lbound, mid_point-1)
         else:
