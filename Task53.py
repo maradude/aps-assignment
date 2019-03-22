@@ -39,20 +39,20 @@ def is_point_in_range(point, region):
 
 
 def contained(super_set, sub_set):
-        """
+    """
 
         :param d): return region[d][0] <:  (Default value = point[d] <= region[d][1]return all(map(check)
         :param range(len(region))))contained(super_set:
         :param sub_set:
 
-        """
+    """
     def check(d, region, point): return (region[d][0] <= point[val(0, d)]
                                          <= point[val(1, d)] <= region[d][1])
     return all(check(d, super_set, sub_set) for d in range(len(super_set)))
 
 
 def get_all_values(array, node):
-        """
+    """
 
         :param d:
         :param region:
@@ -63,7 +63,7 @@ def get_all_values(array, node):
         :param sub_set) for d in range(len(super_set)))get_all_values(array:
         :param node:
 
-        """
+    """
     RangeTree.get_tree_values(array, node)
 
 
