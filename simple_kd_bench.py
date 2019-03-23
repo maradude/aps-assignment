@@ -87,7 +87,7 @@ def try_bounds2():
     res = []
     funcs = [bruteforce, build_kd_tree, kd_tree_without_contained, kd_tree_with_contained]
     ds= [2,3,5,10,50]
-    es = (random_coords(1_000_000, d) for d in ds)
+    es = (random_coords(100_000, d) for d in ds)
     for d, e in zip(ds, es):
         print(d,len(e))
         bres = []
@@ -107,10 +107,8 @@ def try_bounds(es, d=2):
 if __name__ == '__main__':
 
 	var_ele = try_bounds(create_test_ns(2))
-	var_dim = try_bounds2()
-
-
 	pickle.dump( var_ele, open( "variable_elements.p", "wb" ) )
+	var_dim = try_bounds2()
 	pickle.dump( var_dim, open( "variable_dimensions.p", "wb"))
 
 

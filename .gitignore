@@ -5,3 +5,4 @@ __pycache__/*
 *.png
 tests/predfined_large_arrays.py
 tests/predfined_random_data.py
+*copy*
