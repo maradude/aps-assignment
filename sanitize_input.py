@@ -41,15 +41,15 @@ def _get_kd_tree_parts():
     points = []
     for _ in range(len_points):
         points.append(tuple(int(n) for n in next(tests).split(' ')))
-    return tests, points, k_dimensions
+    return tests, points, k_dimensions, len_ranges
 
 
 def _get_kd_input():
     """Read k numbers per line from stdin,
     first line needs to have amount of points, number of dimensions,
-    and number of test ranges, subsequent q lines are points
-    line after q are the tests cases where each test case needs
-    be made of 2 elements, either a pairs of brackets for each query
+    and number of test ranges, subsequent r lines are points,
+    lines after r are the tests cases where each test case needs
+    be made of 2 elements per line, either a pairs of brackets for each query
     denoting min and max values for each dimension or for spherical
     cases brackets with kd point followed by a integer denoting radius
 
@@ -60,10 +60,9 @@ def _get_kd_input():
 
 
     """
-    tests, points, k_dimensions = _get_kd_tree_parts()
-    array = sub(' ', ',', next(tests))
-    ranges = loads(f"[{array}]")
-    r = list(zip(ranges[::2], ranges[1::2]))
+    tests, points, k_dimensions, len_ranges = _get_kd_tree_parts()
+    arrays = [f"[{sub(' ', ',', next(tests))}]" for _ in range(len_ranges)]
+    r = [loads(arr) for arr in arrays]
     return Tests(elements=points, ranges=r, dimensions=k_dimensions)
 
 
