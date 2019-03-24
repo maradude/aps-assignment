@@ -152,9 +152,7 @@ def main():
     perform range query for all ranges in test_object
     print each query result in a new line
     """
-    # from print_binary_tree import printTree
     rangeTree = RangeTree(test_object.elements)
-    # printTree(rangeTree.root)
     for lower, upper in test_object.ranges:
         print(' '.join(map(str, rangeTree.one_d_range_query(lower, upper))))
 
@@ -162,5 +160,4 @@ def main():
 if __name__ == '__main__':
     from sanitize_input import get_input
     test_object = get_input()
-    # print(test_object)
     main()

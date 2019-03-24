@@ -146,9 +146,7 @@ def main():
     print results of get_range for each region given by test_object on a new line
     """
     from Task43 import KDTree
-    # from print_binary_tree import printTree
     tree = KDTree(test_object.elements)
-    # printTree(tree.root)
     for test in test_object.ranges:
         ranges_by_dimension = list(zip(test[0], test[1]))
         a = get_range(tree.root, ranges_by_dimension)

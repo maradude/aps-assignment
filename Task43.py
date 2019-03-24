@@ -55,9 +55,8 @@ class KDTree:
 
 def main():
     """ """
-    from print_binary_tree import printTree
     a = KDTree(test_object.elements)
-    printTree(a.root)
+    print(a)
 
 
 if __name__ == '__main__':
