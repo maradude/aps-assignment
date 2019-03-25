@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
-from dataclasses import dataclass  # requires Python 3.7
 from json import loads
 from re import sub
-from typing import List
 
 
 def get_input(type="1d"):
