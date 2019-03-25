@@ -102,9 +102,11 @@ def parse_range(range_string):
 @dataclass
 class Tests:
     """just a record to hold elements list and range tuples"""
-    elements: List
-    ranges: List
-    dimensions: int = 1
+
+    def __init__(self, elements, ranges, dimensions=1):
+        self.elements = elements
+        self.ranges = ranges
+        self.dimensions = dimensions
 
 
 if __name__ == '__main__':
