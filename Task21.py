@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Create a balanced binary search tree from a sorted list of values.
 Each internal node is given the value of the median index (rounded down) and are not

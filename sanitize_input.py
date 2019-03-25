@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys
 from dataclasses import dataclass  # requires Python 3.7
 from json import loads

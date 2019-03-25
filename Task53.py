@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 """
 This file is just used to benchmark difference between KDRangeSearch
 with and without the contained function, please don't read further into it

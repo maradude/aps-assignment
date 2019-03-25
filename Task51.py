@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 """
 Find all points in KD-tree between lower and upper bound
 """

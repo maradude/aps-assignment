@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 """
 Sort list of values, perform binary search to find smallest element
 that is larger or equal to a given lower bound, then using that as a lower bound

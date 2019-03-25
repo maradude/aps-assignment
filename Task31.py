@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 """
 as easy to understand k-dimensional range query for k-dimensional
 rectangle queries where each side goes along the x- or y-axis.

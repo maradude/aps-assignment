@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 KD range search for n-spheres, actual KD-Tree search is done
 by building a hypercube around the  n-sphere and then checking

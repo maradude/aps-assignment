@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 """
 Create a KD-tree from a list of list with k sortable values inside,
 where k mandates dimensionality of tree
