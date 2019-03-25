@@ -4,7 +4,6 @@ where k mandates dimensionality of tree
 """
 
 
-from dataclasses import dataclass  # requires python 3.7
 from operator import itemgetter
 
 
@@ -14,12 +13,13 @@ class KDTree:
     def __init__(self, values):
         self.root = KDTree.BuildKDTree(values, 0)
 
-    @dataclass
     class _Node:
         """ """
-        data: int
-        left: '_Node' = None
-        right: '_Node' = None
+
+        def __init__(self, data, left=None, right=None):
+            self.data = data
+            self.left = left
+            self.right = right
 
         def is_leaf(self):
             """maybe should be parameter?"""

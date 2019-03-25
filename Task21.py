@@ -5,8 +5,6 @@ returned by range search are only used for guiding search.
 Leaves contain actual values returned by range searches.
 """
 
-
-from dataclasses import dataclass  # requires Python 3.7
 from math import ceil
 
 
@@ -17,12 +15,13 @@ class RangeTree:
     def __init__(self, values):
         self.root = RangeTree.build(sorted(values))
 
-    @dataclass()
     class _Node:
         """ """
-        data: int
-        left: '_Node' = None
-        right: '_Node' = None
+
+        def __init__(self, data, left=None, right=None):
+            self.data = data
+            self.left = left
+            self.right = right
 
         def is_leaf(self):
             """

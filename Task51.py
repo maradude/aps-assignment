@@ -2,7 +2,6 @@
 Find all points in KD-tree between lower and upper bound
 """
 from Task21 import RangeTree
-from copy import deepcopy
 
 
 def intersect(minMax1, minMax2):
