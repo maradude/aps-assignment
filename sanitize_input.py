@@ -97,7 +97,6 @@ def parse_range(range_string):
     return tuple(int(e) for e in range_string.split(' '))
 
 
-@dataclass
 class Tests:
     """just a record to hold elements list and range tuples"""
 
